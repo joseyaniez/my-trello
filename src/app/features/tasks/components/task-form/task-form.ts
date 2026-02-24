@@ -5,6 +5,9 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css',
+  host: {
+    'class': 'flex flex-col items-center w-full'
+  }
 })
 export class TaskForm {
 
