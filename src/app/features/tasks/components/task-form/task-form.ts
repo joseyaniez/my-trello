@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-form',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css',
   host: {
@@ -10,5 +11,5 @@ import { Component } from '@angular/core';
   }
 })
 export class TaskForm {
-
+  taskContent = new FormControl('');
 }
