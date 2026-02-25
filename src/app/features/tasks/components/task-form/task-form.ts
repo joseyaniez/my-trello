@@ -22,8 +22,8 @@ export class TaskForm {
     if(this.taskContent.value && this.taskContent.value.length > 0){
       this.taskService.setNewTask({
         id: lastIndex + 1,
-        description: this.taskContent.value ?? '',
-        status: "red"
+        description: this.taskContent.value.trim() ?? '',
+        status: "pending"
       })
     }
     this.taskContent.setValue('');
