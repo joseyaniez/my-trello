@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TaskDataStore } from '../../services/task-data-store';
 
 @Component({
   selector: 'app-task-form',
@@ -11,5 +12,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   }
 })
 export class TaskForm {
+
+  taskService = inject(TaskDataStore);
+
   taskContent = new FormControl('');
 }
