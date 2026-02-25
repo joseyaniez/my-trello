@@ -1,10 +1,12 @@
 
 <label class="text-white font-bold text-xl" for="todo-form">Crea una nueva tarea</label>
-<textarea [formControl]="taskContent" class="rounded-md border-2 border-white w-1/2 h-20 p-2 my-2" id="todo-form"></textarea>
+<textarea (keyup.shift.enter)="saveNewTask($event)" [formControl]="taskContent" class="rounded-md border-2 border-white w-1/2 h-20 p-2 my-2" id="todo-form"></textarea>
 <p>Value is: {{taskContent.value}}</p>
 
-@for(task of taskService.getTasks(); track task.id){
-  {{task.description}}
-} @empty {
-  <p>No hay tareas en este momento</p>
-}
+<div class="flex flex-col">
+  @for(task of taskService.getTasks(); track task.id){
+    <p>{{task.description}}</p>
+  } @empty {
+    <p>No hay tareas en este momento</p>
+  }
+</div>

@@ -16,4 +16,17 @@ export class TaskForm {
   taskService = inject(TaskDataStore);
 
   taskContent = new FormControl('');
+
+  saveNewTask(event: Event): void {
+    let lastIndex = this.taskService.getLastIdTask();
+    if(this.taskContent.value && this.taskContent.value.length > 0){
+      this.taskService.setNewTask({
+        id: lastIndex + 1,
+        description: this.taskContent.value ?? '',
+        status: "red"
+      })
+    }
+    this.taskContent.setValue('');
+  }
+
 }

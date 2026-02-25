@@ -20,6 +20,10 @@ export class TaskDataStore {
     return this.tasks;
   }
 
+  getLastIdTask(): number {
+    return this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) : 0;
+  }
+
   setNewTask(task: Task): void {
     this.tasks.push(task);
     this.storageService.setItem('tasks', this.tasks);
