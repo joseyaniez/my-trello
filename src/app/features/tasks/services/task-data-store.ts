@@ -12,7 +12,7 @@ export class TaskDataStore {
   private tasks: Task[];
 
   constructor(){
-    let resultTasks = this.storageService.getItem<Task[]>('tasks');
+    let resultTasks = this.storageService.getItem<Task[]>('tasks')?.reverse();
     this.tasks = resultTasks ?? [];
   }
 

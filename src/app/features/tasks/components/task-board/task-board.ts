@@ -13,5 +13,4 @@ import { TaskCardItem } from './task-card-item/task-card-item';
 })
 export class TaskBoard {
   taskService = inject(TaskDataStore);
-
 }

@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { Task } from '../../../models/Task';
 
 @Component({
   selector: 'app-task-card-item',
@@ -8,6 +9,6 @@ import { Component, input } from '@angular/core';
 })
 export class TaskCardItem {
 
-  content = input.required<string>();
+  content = input.required<Task>();
 
 }
