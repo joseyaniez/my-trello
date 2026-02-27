@@ -8,7 +8,7 @@ import { TaskCardItem } from './task-card-item/task-card-item';
   templateUrl: './task-board.html',
   styleUrl: './task-board.css',
   host: {
-    'class': "flex w-full my-15 flex-row justify-center gap-4"
+    'class': "flex w-2/3 my-15 flex-row justify-center gap-4"
   }
 })
 export class TaskBoard {

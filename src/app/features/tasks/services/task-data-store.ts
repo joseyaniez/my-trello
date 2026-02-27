@@ -20,6 +20,18 @@ export class TaskDataStore {
     return this.tasks;
   }
 
+  getPendingTasks(): Task[]{
+    return this.tasks.filter(t => t.status == "pending");
+  }
+
+  getProgressTasks(): Task[]{
+    return this.tasks.filter(t => t.status == "in-process");
+  }
+
+  getCompletedTasks(): Task[]{
+    return this.tasks.filter(t => t.status == "completed");
+  }
+
   getLastIdTask(): number {
     return this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) : 0;
   }
