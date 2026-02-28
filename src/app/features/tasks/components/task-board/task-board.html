@@ -1,18 +1,18 @@
-<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl">
+<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
   <p class="text-white text-xl font-bold text-center">Pendientes</p>
   @for(task of taskService.getPendingTasks(); track task.id){
     <app-task-card-item [content]="task"/>
   }
 </div>
 
-<div class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl">
+<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
   <p class="text-white text-xl font-bold text-center">En progreso</p>
   @for(task of taskService.getProgressTasks(); track task.id){
     <app-task-card-item [content]="task"/>
   }
 </div>
 
-<div class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl">
+<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
   <p class="text-white text-xl font-bold text-center">Terminado</p>
   @for(task of taskService.getCompletedTasks(); track task.id){
     <app-task-card-item [content]="task"/>
