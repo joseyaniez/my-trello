@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../models/Task';
 import { StorageService } from '../../../shared/services/storage-service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,10 @@ export class TaskDataStore {
 
   getTasks(): Task[] {
     return this.tasks;
+  }
+
+  moveTaskItem(event: CdkDragDrop<Task[]>){
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
   }
 
   getPendingTasks(): Task[]{
