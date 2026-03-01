@@ -11,10 +11,15 @@ export class TaskDataStore {
   private storageService = inject(StorageService);
 
   private tasks: Task[];
+  private pendingTasks: Task[];
+  private processTasks: Task[];
+  private completedTasks: Task[];
 
   constructor(){
-    let resultTasks = this.storageService.getItem<Task[]>('tasks')?.reverse();
-    this.tasks = resultTasks ?? [];
+    this.tasks = this.storageService.getItem<Task[]>('tasks')?.reverse() ?? [];
+    this.pendingTasks = this.tasks.filter(t => t.status == "pending");
+    this.processTasks = this.tasks.filter(t => t.status == "in-process");
+    this.completedTasks = this.tasks.filter(t => t.status == "completed");
   }
 
   getTasks(): Task[] {
@@ -26,15 +31,15 @@ export class TaskDataStore {
   }
 
   getPendingTasks(): Task[]{
-    return this.tasks.filter(t => t.status == "pending");
+    return this.pendingTasks;
   }
 
-  getProgressTasks(): Task[]{
-    return this.tasks.filter(t => t.status == "in-process");
+  getProcessTasks(): Task[]{
+    return this.processTasks;
   }
 
   getCompletedTasks(): Task[]{
-    return this.tasks.filter(t => t.status == "completed");
+    return this.completedTasks;
   }
 
   getLastIdTask(): number {
