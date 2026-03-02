@@ -1,6 +1,7 @@
-<div cdkDrag class="bg-white flex flex-col min-h-30 min-w-30 m-4 rounded-md p-4">
-  <div cdkDragHandle class="w-full flex flex-row justify-end">
-    <span class="w-6 h-6 rounded-full bg-cyan-500 cursor-grab"></span>
+<div cdkDrag [cdkDragData]="content().id" class="bg-white flex flex-col min-h-30 min-w-30 m-4 rounded-md p-4">
+  <div cdkDragHandle class="w-full flex flex-row mb-2 justify-between">
+    <span (click)="deleteTask()" class="px-2 rounded-full flex justify-center items-center bg-red-500 text-white text-[10px]">Eliminar</span>
+    <span class="w-5 h-5 rounded-full bg-cyan-500 cursor-grab"></span>
   </div>
   <p>{{content().description}}</p>
 </div>

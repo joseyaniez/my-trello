@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { Task } from '../models/Task';
 import { StorageService } from '../../../shared/services/storage-service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root',
@@ -10,44 +10,61 @@ export class TaskDataStore {
 
   private storageService = inject(StorageService);
 
-  private tasks: Task[];
-  private pendingTasks: Task[];
-  private processTasks: Task[];
-  private completedTasks: Task[];
+  private _tasks = signal<Task[]>([]);
+  private _pendingTasks = linkedSignal(() => this._tasks().filter(t => t.status == "pending"));
+  private _processTasks = linkedSignal(() => this._tasks().filter(t => t.status == "in-process"));
+  private _completedTasks = linkedSignal(() => this._tasks().filter(t => t.status == "completed"));
+
+  tasks = this._tasks.asReadonly();
+  pendingTasks = this._pendingTasks.asReadonly();
+  processTasks = this._processTasks.asReadonly();
+  completedTasks = this._completedTasks.asReadonly();
 
   constructor(){
-    this.tasks = this.storageService.getItem<Task[]>('tasks')?.reverse() ?? [];
-    this.pendingTasks = this.tasks.filter(t => t.status == "pending");
-    this.processTasks = this.tasks.filter(t => t.status == "in-process");
-    this.completedTasks = this.tasks.filter(t => t.status == "completed");
+    this._tasks.set(this.storageService.getItem<Task[]>('tasks')?.reverse() ?? []);
+
+    effect(() => {
+      this.storageService.setItem('tasks', this._tasks());
+    })
   }
 
-  getTasks(): Task[] {
-    return this.tasks;
-  }
 
-  moveTaskItem(event: CdkDragDrop<Task[]>){
-    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-  }
-
-  getPendingTasks(): Task[]{
-    return this.pendingTasks;
-  }
-
-  getProcessTasks(): Task[]{
-    return this.processTasks;
-  }
-
-  getCompletedTasks(): Task[]{
-    return this.completedTasks;
+  moveTaskItem(event: CdkDragDrop<Task[]>, status: "pending" | "completed" | "in-process" = "pending"){
+    if(event.previousContainer == event.container){
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      let idItem = event.item.data;
+      this._tasks.update(tArr => tArr.map<Task>(t => {
+        if(t.id == idItem){
+          return {id: t.id, description: t.description, status: status}
+        } else {
+          return t
+        }
+      }))
+    }
   }
 
   getLastIdTask(): number {
-    return this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) : 0;
+    let result = Math.max(...this.tasks().map(t => t.id));
+    if (result == -Infinity){
+      return 0;
+    }
+    return result;
   }
 
   setNewTask(task: Task): void {
-    this.tasks.push(task);
-    this.storageService.setItem('tasks', this.tasks);
+    this._tasks.update((taskArr) => [...taskArr, task]);
+    this.storageService.setItem('tasks', this.tasks());
+  }
+
+  deleteTask(task: Task): void {
+    this._tasks.update((taskArr) => taskArr.filter((t) => t.id != task.id))
+    this.storageService.setItem('tasks', this._tasks());
   }
 }

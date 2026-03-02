@@ -1,20 +1,41 @@
-<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
+<div
+  cdkDropList
+  #listPending="cdkDropList"
+  [cdkDropListData]="taskService.pendingTasks()"
+  [cdkDropListConnectedTo]="[listProgress, listCompleted]"
+  (cdkDropListDropped)="taskService.moveTaskItem($event)"
+  class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto"
+>
   <p class="text-white text-xl font-bold text-center">Pendientes</p>
-  @for(task of taskService.getPendingTasks(); track task.id){
+  @for(task of taskService.pendingTasks(); track task.id){
     <app-task-card-item [content]="task"/>
   }
 </div>
 
-<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
+<div
+  cdkDropList
+  #listProgress="cdkDropList"
+  [cdkDropListData]="taskService.processTasks()"
+  [cdkDropListConnectedTo]="[listPending, listCompleted]"
+  (cdkDropListDropped)="taskService.moveTaskItem($event, 'in-process')"
+  class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto"
+>
   <p class="text-white text-xl font-bold text-center">En progreso</p>
-  @for(task of taskService.getProgressTasks(); track task.id){
+  @for(task of taskService.processTasks(); track task.id){
     <app-task-card-item [content]="task"/>
   }
 </div>
 
-<div cdkDropList (cdkDropListDropped)="taskService.moveTaskItem($event)" class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto">
+<div
+  cdkDropList
+  #listCompleted="cdkDropList"
+  [cdkDropListData]="taskService.completedTasks()"
+  [cdkDropListConnectedTo]="[listPending, listProgress]"
+  (cdkDropListDropped)="taskService.moveTaskItem($event, 'completed')"
+  class="flex-col flex-1 gap-4 bg-cyan-600 p-4 rounded-xl max-h-150 overflow-auto"
+>
   <p class="text-white text-xl font-bold text-center">Terminado</p>
-  @for(task of taskService.getCompletedTasks(); track task.id){
+  @for(task of taskService.completedTasks(); track task.id){
     <app-task-card-item [content]="task"/>
   }
 </div>
